@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Todo App
+
+A simple todo application built with Next.js, Drizzle ORM, and PostgreSQL. This app allows you to create, view, and manage tasks with titles, descriptions, and status tracking.
+
+## Features
+
+- ✅ Add new tasks with title, description, and status
+- 📋 View all tasks in a clean, organized list
+- 🎨 Modern, responsive UI with Tailwind CSS
+- 🗄️ Persistent data storage with Drizzle ORM
+- ⚡ Fast development with Next.js 15 and Turbopack
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: PostgreSQL with Drizzle ORM
+- **Database Provider**: Neon (serverless PostgreSQL)
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- A PostgreSQL database (recommended: [Neon](https://neon.tech/))
+
+### Installation
+
+1. Clone the repository and install dependencies:
+
+```bash
+npm install
+```
+
+2. Set up your environment variables:
+
+Create a `.env.local` file in the root directory:
+
+```env
+DATABASE_URL="postgresql://username:password@your-database-url"
+```
+
+For Neon, your URL will look like:
+
+```
+DATABASE_URL="postgresql://username:password@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require"
+```
+
+3. Generate and run database migrations:
+
+```bash
+npm run db:generate
+npm run db:migrate
+```
+
+4. Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database Schema
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The app uses a simple `tasks` table with the following structure:
 
-## Learn More
+- `id`: Serial primary key
+- `title`: Task title (required, max 255 characters)
+- `description`: Task description (optional, text)
+- `status`: Task status (pending, in-progress, completed)
+- `createdAt`: Timestamp when task was created
+- `updatedAt`: Timestamp when task was last updated
 
-To learn more about Next.js, take a look at the following resources:
+## Available Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run db:generate` - Generate database migrations
+- `npm run db:migrate` - Run database migrations
+- `npm run db:studio` - Open Drizzle Studio (database GUI)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+```
+src/
+├── app/
+│   ├── api/tasks/     # API routes for task operations
+│   ├── layout.tsx     # Root layout component
+│   └── page.tsx       # Main page component
+├── components/
+│   ├── TaskForm.tsx   # Form for adding new tasks
+│   └── TaskList.tsx   # Component for displaying tasks
+└── lib/
+    ├── db.ts          # Database connection
+    └── schema.ts      # Database schema definitions
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## API Endpoints
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `GET /api/tasks` - Fetch all tasks
+- `POST /api/tasks` - Create a new task
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
