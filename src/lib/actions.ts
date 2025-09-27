@@ -2,13 +2,28 @@
 
 import { db } from '@/db/db';
 import { tasks } from '@/db/schema';
+import { auth } from '@/lib/auth';
+import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { headers } from 'next/headers';
 
 export async function fetchTasks() {
     try {
-        //const allTasks = await db.select().from(tasks).orderBy(tasks.createdAt);
-        const allTasks = await db.select().from(tasks);
-        return { success: true, data: allTasks };
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+
+        if (!session) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
+        const userTasks = await db
+            .select()
+            .from(tasks)
+            .where(eq(tasks.userId, session.user.id))
+            .orderBy(tasks.createdAt);
+
+        return { success: true, data: userTasks };
     } catch (error) {
         console.error('Error fetching tasks:', error);
         return { success: false, error: 'Failed to fetch tasks' };
@@ -17,6 +32,14 @@ export async function fetchTasks() {
 
 export async function createTask(formData: FormData) {
     try {
+        const session = await auth.api.getSession({
+            headers: await headers(),
+        });
+
+        if (!session) {
+            return { success: false, error: 'Unauthorized' };
+        }
+
         const title = formData.get('title') as string;
         const description = formData.get('description') as string;
         const status = formData.get('status') as string;
@@ -31,6 +54,7 @@ export async function createTask(formData: FormData) {
                 title: title.trim(),
                 description: description?.trim() || null,
                 status: status || 'pending',
+                userId: session.user.id,
             })
             .returning();
 

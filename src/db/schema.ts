@@ -5,6 +5,9 @@ export const tasks = pgTable('tasks', {
     title: varchar('title', { length: 255 }).notNull(),
     description: text('description'),
     status: varchar('status', { length: 50 }).notNull().default('pending'),
+    userId: text('user_id')
+        .notNull()
+        .references(() => user.id, { onDelete: 'cascade' }),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
