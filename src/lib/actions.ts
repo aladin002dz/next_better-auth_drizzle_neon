@@ -6,7 +6,8 @@ import { revalidatePath } from 'next/cache';
 
 export async function fetchTasks() {
     try {
-        const allTasks = await db.select().from(tasks).orderBy(tasks.createdAt);
+        //const allTasks = await db.select().from(tasks).orderBy(tasks.createdAt);
+        const allTasks = await db.select().from(tasks);
         return { success: true, data: allTasks };
     } catch (error) {
         console.error('Error fetching tasks:', error);

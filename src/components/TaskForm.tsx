@@ -1,15 +1,8 @@
 import { createTask } from '@/lib/actions';
 
 export default function TaskForm() {
-    const handleSubmit = async (formData: FormData) => {
-        const result = await createTask(formData);
-        if (!result.success) {
-            console.error('Failed to create task:', result.error);
-        }
-    };
-
     return (
-        <form action={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
+        <form action={createTask} className="bg-white p-6 rounded-lg shadow-md space-y-4">
             <h2 className="text-xl font-semibold text-gray-800">Add New Task</h2>
 
             <div>
