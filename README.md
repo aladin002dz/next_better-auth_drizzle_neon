@@ -97,11 +97,6 @@ src/
     └── schema.ts      # Database schema definitions
 ```
 
-## API Endpoints
-
-- `GET /api/tasks` - Fetch all tasks
-- `POST /api/tasks` - Create a new task
-
 ## Contributing
 
 1. Fork the repository
