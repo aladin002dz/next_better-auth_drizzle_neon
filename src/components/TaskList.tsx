@@ -1,6 +1,6 @@
 'use client';
 
-import { Task } from '@/lib/schema';
+import { Task } from '@/db/schema';
 
 interface TaskListProps {
     tasks: Task[];

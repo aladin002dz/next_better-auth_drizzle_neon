@@ -1,28 +1,15 @@
-'use client';
+import { createTask } from '@/lib/actions';
 
-import { useState } from 'react';
-
-interface TaskFormProps {
-    onSubmit: (task: { title: string; description: string; status: string }) => void;
-}
-
-export default function TaskForm({ onSubmit }: TaskFormProps) {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [status, setStatus] = useState('pending');
-
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!title.trim()) return;
-
-        onSubmit({ title: title.trim(), description: description.trim(), status });
-        setTitle('');
-        setDescription('');
-        setStatus('pending');
+export default function TaskForm() {
+    const handleSubmit = async (formData: FormData) => {
+        const result = await createTask(formData);
+        if (!result.success) {
+            console.error('Failed to create task:', result.error);
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
+        <form action={handleSubmit} className="bg-white p-6 rounded-lg shadow-md space-y-4">
             <h2 className="text-xl font-semibold text-gray-800">Add New Task</h2>
 
             <div>
@@ -32,8 +19,7 @@ export default function TaskForm({ onSubmit }: TaskFormProps) {
                 <input
                     type="text"
                     id="title"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    name="title"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter task title"
                     required
@@ -46,8 +32,7 @@ export default function TaskForm({ onSubmit }: TaskFormProps) {
                 </label>
                 <textarea
                     id="description"
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    name="description"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Enter task description"
                     rows={3}
@@ -60,8 +45,7 @@ export default function TaskForm({ onSubmit }: TaskFormProps) {
                 </label>
                 <select
                     id="status"
-                    value={status}
-                    onChange={(e) => setStatus(e.target.value)}
+                    name="status"
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                     <option value="pending">Pending</option>
